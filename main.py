@@ -1,6 +1,6 @@
 import logging
 import signal
-import sys
+import os
 from tornado.ioloop import IOLoop
 from tornado.web import Application, RequestHandler
 from tornado.httpserver import HTTPServer
@@ -45,6 +45,7 @@ if __name__ == '__main__':
 
     app = start_server()
     http_server = HTTPServer(app)
-    http_server.listen(8888)
+    port = int(os.getenv('PORT', 8888))
+    http_server.listen(port)
     logging.info('Starting server')
     IOLoop.current().start()
