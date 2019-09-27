@@ -4,6 +4,7 @@ import os
 from tornado.ioloop import IOLoop
 from tornado.web import Application, RequestHandler
 from tornado.httpserver import HTTPServer
+from tornado.escape import json_decode
 from tornado import gen
 
 from tornado.log import enable_pretty_logging
@@ -21,6 +22,10 @@ class CommandHookHandler(RequestHandler):
 
         if event == 'ping':
             self.write('pong')
+        elif event == 'issues' or event == 'issue_comment' or event == 'push':
+            body = json_decode(self.request.body)
+            # repo_full_name = body['repository']['full_name']
+            self.write(body)
         else:
             print('Unhandled event "{}".'.format(event))
             self.set_status(404)
